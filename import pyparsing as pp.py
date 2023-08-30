@@ -12,7 +12,7 @@ dir = Literal['left','right','front','back']
 ori = Literal['south','north','west','east']
 nombre = Word(alphanums) 
 
-valor = nums | dir | ori
+valor = Word
 param =  '(' + ((valor) + ZeroOrMore(Literal(",") + (valor))) | Empty + ')'
 LVacia = ["nop("]
 LSimpleValor = ["walk(","leap(","drop(","get(","grab(","letGo("]
