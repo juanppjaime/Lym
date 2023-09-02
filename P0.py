@@ -39,7 +39,7 @@ bloque = '{' + ((comando) + ZeroOrMore(Literal(";") + (comando))) + '}'
 bloque2 = '{' + ((comando2) + ZeroOrMore(Literal(";") + (comando2))) + '}'
 
 #IF
-iff = 'if' + condicion + bloque + 'else' + bloque
+iff = 'if' + condicion + bloque + 'else' + comando|bloque
 
 #While
 whilee = 'while' + condicion + bloque
@@ -48,13 +48,13 @@ whilee = 'while' + condicion + bloque
 repeat = 'repeat' + numeros + 'times' + bloque
 
 #Bloque condicional
-bloque_condicional = '{' + iff | whilee | repeat + '}'
+bloque_condicional = '{' + (iff | whilee | repeat) + '}'
 
 #Defvar
 defVar = 'defVar' + nombre + numeros
 
 #DefProc
-defProc = 'defProc' + nombre + param + ZeroOrMore(iff|bloque2) 
+defProc = 'defProc' + nombre + param + ZeroOrMore(bloque_condicional|bloque2) 
 
 #Llamado
 llamado = bloque
@@ -70,8 +70,14 @@ drop(5);
 letGo(3);
 walk(5)
 }
-defProc goNorth()
-ifcan(walk(1,west)){walk(1,west)}elsenop()
+defProc goNorth(){
+
+repeat 1 times {
+drop(5);
+letGo(3);
+walk(5)
+}
+}
 defProc goWest (6,south)
 {
 drop(5);
