@@ -73,8 +73,8 @@ def read():
     f.close()
     return input_text
 
-input_text = "."
-#input_text = read
+#input_text = "."
+input_text = read()
 #//Verificar que el input cumpla con las reglas de la gramatica
 
 try:

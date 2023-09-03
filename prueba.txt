@@ -1,0 +1,32 @@
+defVarnom0
+defVarx0
+defVary0
+defVar one 0
+defVar mewtwo 3
+defProc putCB (c , b )
+{
+drop(c);
+letGo(b);
+while can(walk(1 , north ) ) { walk(1 , north  )};
+while can(walk(1 , north ) ) { walk(1 , north  )};
+if can(walk(1 , west ) ) { walk(1 , west ) } else nop();
+walk(n);
+jump(c,d)
+}
+{ 
+drop(a)}
+defProc goNorth (d,g,h)
+{
+while can(walk(1 , north ) ) { walk(1 , north ) }
+}
+defProc goWest ()
+{
+if can(walk(1 , west ) ) { walk(1 , west ) } else nop()
+}
+{ 
+walk(1,north);
+putCB(2,2);
+walk(1,north);
+goWest(1,8);
+putCB(2,2)
+}
