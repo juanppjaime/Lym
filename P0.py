@@ -108,13 +108,14 @@ try:
 
     for i in e:
         sumatoria += len(i)
-    longitud_sin_espacios = len(input_text.replace(" ", ""))
-    if sumatoria == (longitud_sin_espacios- (len(input_text.splitlines()))):
+    longitud = (input_text.replace(" ", ""))
+    longitud2= (longitud.replace("\n", ""))
+    if sumatoria == (len(longitud2)):
         print("Yes")
     else:
-        print("No sirve")
+        print("No")
+        #print(e)
         #print(sumatoria)
-        #print(longitud_sin_espacios)
 except pp.ParseException as e:
     print("No")
 
