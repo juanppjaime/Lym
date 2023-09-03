@@ -77,22 +77,50 @@ def read():
 input_text = read()
 #//Verificar que el input cumpla con las reglas de la gramatica
 
+## Lista Param Procesos
+
+def calcularParam(j,pos,dict):
+    contador = 1
+    pos2 = pos+1
+    while j[pos2] != "{":
+        if j[pos2] == "()":
+            contador = 0
+            break
+        if (j[pos2] == ","):
+            contador += 1
+        pos2 += 1
+    dict[j[pos+1]]=contador  
+    
 try:
     j = pattern2.parseString(input_text)
     pos = 0
-
+    LCompletaParam = {}
+    dict = {}
     while pos<len(j):
-
         if j[pos] == "defProc":
-
-          LCompleta.append(j[pos+1])
+            LCompleta.append(j[pos+1])
+            calcularParam(j,pos,LCompletaParam)         
         pos+=1
     
+    pos=0
+    while pos <len(j)  and j[pos-1] != "defProc":
+        aux = LCompletaParam.keys()
+        if j[pos] in aux:
+            print("llegue")
+            print(j[pos])
+            print(pos)
+            print(j)
+            calcularParam(j,pos,dict)
+        pos+=1
+            
+            
+            
+    print(LCompletaParam)
+    print(dict)
 except pp.ParseException as e:
     print("No")
 
 try: 
-
     #Bloque función
 
     bloque_funcion =  (oneOf(LCompleta)) + ("()"| ("(" + (numeros|dir|ori) + ZeroOrMore(Literal(",") + (numeros|dir|ori)) + ")"))
@@ -103,7 +131,7 @@ try:
     pattern = ZeroOrMore(defVar) + ZeroOrMore(defProc) + ZeroOrMore(llamado) 
     e = pattern.parseString(input_text)
     sumatoria = 0
-    print(LCompleta)
+    #print(LCompleta)
     
 
     for i in e:
