@@ -10,7 +10,7 @@ dash = '-'
 'numeros y existe'
 dir = oneOf(['left','right','front','back'])
 ori = oneOf(['south','north','west','east'])
-nombre = Word(alphanums) 
+nombre = Word(alphas) 
 
 valor = Word(alphanums)
 param =  ('(' + ((valor) + ZeroOrMore(Literal(",") + (valor))) + ')') | "()"
@@ -22,7 +22,8 @@ LDobleValorValor =  oneOf(["jump("])
 LDobleValorDir =  oneOf(["walk(","leap("])
 LDobleValorOri =  oneOf(["leap(","walk("])
 comando = (LVacia + ")" | (LSimpleValor + numeros + ")") | (LSimpleDir + dir + ")") | (LSimpleOri + ori + ")") | (LDobleValorValor + numeros + ',' + numeros + ")") | (LDobleValorDir) + numeros + "," + dir + ")" | (LDobleValorOri + numeros + ',' + ori + ")") ) 
-comando2 = (LVacia  | (LSimpleValor + valor) | (LSimpleDir + valor) | (LSimpleOri + valor) | (LDobleValorValor + valor + ',' + valor) | (LDobleValorDir + valor + ',' + valor) | (LDobleValorOri + valor + ',' + valor )) + ')'   
+comando2 = (LVacia  | (LSimpleValor + valor) | (LSimpleDir + valor) | (LSimpleOri + valor) | (LDobleValorValor + valor + ',' + valor) | (LDobleValorDir + valor + ',' + valor) | (LDobleValorOri + valor + ',' + valor )) + ')'  
+LCompleta = [] 
 
 #Condiciones
 facing = 'facing(' + ori + ')' 
@@ -38,6 +39,8 @@ bloque = '{' + ((comando) + ZeroOrMore(Literal(";") + (comando))) + '}'
 
 bloque2 = '{' + ((comando2) + ZeroOrMore(Literal(";") + (comando2))) + '}'
 
+#Bloque llamado
+
 #IF
 iff = 'if' + condicion + bloque + 'else' + comando|bloque
 
@@ -50,56 +53,70 @@ repeat = 'repeat' + numeros + 'times' + bloque
 #Bloque condicional
 bloque_condicional = '{' + (iff | whilee | repeat) + '}'
 
+#Bloque general
+
+bloque_general = "{" + ((iff | whilee | repeat|comando2) + (ZeroOrMore(Literal(";") + (comando2 |iff | whilee | repeat)))) + "}"
+
 #Defvar
 defVar = 'defVar' + nombre + numeros
 
 #DefProc
-defProc = 'defProc' + nombre + param + ZeroOrMore(bloque_condicional|bloque2) 
+defProc = 'defProc' + nombre + param + ZeroOrMore(bloque_general) 
 
 #Llamado
-llamado = bloque
 
-pattern = ZeroOrMore(defVar) + ZeroOrMore(defProc) 
-input_text = """
-defVar nom 1
-defVar y 0
-defVar one 0
-defProc putCB (a,n)
-{
-drop(5);
-letGo(3);
-walk(5)
-}
-defProc goNorth(){
+pattern2 = ZeroOrMore(defVar) + ZeroOrMore(defProc)  
 
-repeat 1 times {
-drop(5);
-letGo(3);
-walk(5)
-}
-}
-defProc goWest (6,south)
-{
-drop(5);
-letGo(3);
-walk(9)
-}
-defProc goWest (6,south)
-{
-jump (3,3);
-putCB (2,1)
-}
-"""
-#input_text = input_text.replace(" ","")
-# Analizar una cadena
-result = pattern.parseString(input_text)
-if result:
-    print("La palabra 'sigue' sigue a 'esto'")
-else:
-    print("La palabra 'sigue' no sigue a 'esto'")
+def read():
+    f = open("prueba.txt", "r")
+    input_text = f.read()
+    f.close()
+    return input_text
 
-for match, start, stop in pattern.scanString(input_text):
-  print(match,start,match)
+input_text = "."
+#input_text = read
+#//Verificar que el input cumpla con las reglas de la gramatica
+
+try:
+    j = pattern2.parseString(input_text)
+    pos = 0
+
+    while pos<len(j):
+
+        if j[pos] == "defProc":
+
+          LCompleta.append(j[pos+1])
+        pos+=1
+    
+except pp.ParseException as e:
+    print("No")
+
+try: 
+
+    #Bloque función
+
+    bloque_funcion =  (oneOf(LCompleta)) + ("()"| ("(" + (numeros|dir|ori) + ZeroOrMore(Literal(",") + (numeros|dir|ori)) + ")"))
+    
+    bloque_llamado = ((comando|bloque_funcion) + ZeroOrMore(Literal(";") + (comando|bloque_funcion)))
+    #A = oneOf(["putCB","goNorth","goWest"])
+    llamado =  "{" + bloque_llamado + "}" 
+    pattern = ZeroOrMore(defVar) + ZeroOrMore(defProc) + ZeroOrMore(llamado) 
+    e = pattern.parseString(input_text)
+    sumatoria = 0
+    print(LCompleta)
+    
+
+    for i in e:
+        sumatoria += len(i)
+    longitud_sin_espacios = len(input_text.replace(" ", ""))
+    if sumatoria == (longitud_sin_espacios- (len(input_text.splitlines()))):
+        print("Yes")
+    else:
+        print("No sirve")
+        #print(sumatoria)
+        #print(longitud_sin_espacios)
+except pp.ParseException as e:
+    print("No")
 
 
 
