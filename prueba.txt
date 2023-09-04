@@ -9,6 +9,8 @@ drop(c);
 letGo(b);
 while can(walk(1 , north ) ) { walk(1 , north  )};
 while can(walk(1 , north ) ) { walk(1 , north  )};
+while can(walk(1 , north ) ) { walk(1 , north  )};
+while can(walk(1 , north ) ) { walk(1 , north  )};
 if can(walk(1 , west ) ) { walk(1 , west ) } else nop();
 walk(n);
 jump(c,d)
@@ -19,7 +21,7 @@ defProc goNorth (d,g,h)
 {
 while can(walk(1 , north ) ) { walk(1 , north ) }
 }
-defProc goWest (g,g,g,g,g,g)
+defProc goWest (g,g,g,g,g,north)
 {
 if can(walk(1 , west ) ) { walk(1 , west ) } else nop()
 }
@@ -28,5 +30,6 @@ walk(1,north);
 putCB(2,2);
 walk(1,north);
 goWest(5,5,5,5,5,5);
-putCB(2,2)
+putCB(2,2);
+walk(5,north)
 }

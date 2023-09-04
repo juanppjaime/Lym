@@ -25,7 +25,7 @@ LDobleValorValor =  oneOf(["jump("])
 LDobleValorDir =  oneOf(["walk(","leap("])
 LDobleValorOri =  oneOf(["leap(","walk("])
 comando = (LVacia + ")" | (LSimpleValor + numeros + ")") | (LSimpleDir + dir + ")") | (LSimpleOri + ori + ")") | (LDobleValorValor + numeros + ',' + numeros + ")") | (LDobleValorDir) + numeros + "," + dir + ")" | (LDobleValorOri + numeros + ',' + ori + ")") ) 
-comando2 = (LVacia  | (LSimpleValor + valor) | (LSimpleDir + valor) | (LSimpleOri + valor) | (LDobleValorValor + valor + ',' + valor) | (LDobleValorDir + valor + ',' + valor) | (LDobleValorOri + valor + ',' + valor )) + ')'  
+comando2 = ((LVacia  | (LSimpleValor + valor) | (LSimpleDir + valor) | (LSimpleOri + valor))+")") | ((LDobleValorValor + valor + ',' + valor) | (LDobleValorDir + valor + ',' + valor) | (LDobleValorOri + valor + ',' + valor )) + ')'  
 LCompleta = [] 
 
 #Condiciones
@@ -82,17 +82,21 @@ input_text = read()
 
 ## Lista Param Procesos
 
-def calcularParam(j,pos,dict):
-    contador = 1
-    pos2 = pos+1
-    while j[pos2] != "{":
-        if j[pos2] == "()":
-            contador = 0
-            break
-        if (j[pos2] == ","):
-            contador += 1
-        pos2 += 1
-    dict[j[pos+1]]=contador  
+def calcularParam(j, pos, dict):
+    try:
+        contador = 1
+        pos2 = pos + 1
+        while j[pos2] != "{":
+            if j[pos2] == "()":
+                contador = 0
+                break
+            if (j[pos2] == ","):
+                contador += 1
+            pos2 += 1
+        dict[j[pos + 1]] = contador
+    except IndexError:
+        pass
+
     
 try:
     j = pattern2.parseString(input_text)
@@ -165,9 +169,5 @@ try:
         #print(sumatoria)
 except pp.ParseException as e:
     print("No")
-
-
-
-  
 
             
