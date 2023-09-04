@@ -103,8 +103,21 @@ try:
         pos+=1
     
     pos=0
+    
+    
+     #Bloque función
+
+    bloque_funcion =  (oneOf(LCompleta)) + ("()"| ("(" + (numeros|dir|ori) + ZeroOrMore(Literal(",") + (numeros|dir|ori)) + ")"))
+    bloque_llamado = ((comando|bloque_funcion) + ZeroOrMore(Literal(";") + (comando|bloque_funcion)))
+    #A = oneOf(["putCB","goNorth","goWest"])
+    llamado =  "{" + bloque_llamado + "}" 
+    pattern = ZeroOrMore(defVar) + ZeroOrMore(defProc) + ZeroOrMore(llamado) 
+    
+    j = pattern.parseString(input_text)
+    
+    
     while pos <len(j)  and j[pos-1] != "defProc":
-        aux = LCompletaParam.keys()
+        aux = LCompleta
         if j[pos] in aux:
             print("llegue")
             print(j[pos])
@@ -121,14 +134,6 @@ except pp.ParseException as e:
     print("No")
 
 try: 
-    #Bloque función
-
-    bloque_funcion =  (oneOf(LCompleta)) + ("()"| ("(" + (numeros|dir|ori) + ZeroOrMore(Literal(",") + (numeros|dir|ori)) + ")"))
-    
-    bloque_llamado = ((comando|bloque_funcion) + ZeroOrMore(Literal(";") + (comando|bloque_funcion)))
-    #A = oneOf(["putCB","goNorth","goWest"])
-    llamado =  "{" + bloque_llamado + "}" 
-    pattern = ZeroOrMore(defVar) + ZeroOrMore(defProc) + ZeroOrMore(llamado) 
     e = pattern.parseString(input_text)
     sumatoria = 0
     #print(LCompleta)
