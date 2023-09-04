@@ -1,6 +1,9 @@
 import pyparsing as pp
 from pyparsing import *
+import sys
 
+
+exit = 0
 '''
 num = '0' or  '1' or '2'
 ssn = num + '-' + num + '-' + num
@@ -95,7 +98,6 @@ try:
     j = pattern2.parseString(input_text)
     pos = 0
     LCompletaParam = {}
-    dict = {}
     while pos<len(j):
         if j[pos] == "defProc":
             LCompleta.append(j[pos+1])
@@ -115,25 +117,37 @@ try:
     
     j = pattern.parseString(input_text)
     
-    
-    while pos <len(j)  and j[pos-1] != "defProc":
+    validacion = []
+    while pos <len(j):
         aux = LCompleta
-        if j[pos] in aux:
-            print("llegue")
-            print(j[pos])
-            print(pos)
-            print(j)
-            calcularParam(j,pos,dict)
+        if j[pos] in aux and j[pos-1] != "defProc":
+
+            contador = 1
+            pos2 = pos+1
+            while j[pos2] != ';' and j[pos2] != '}':
+                if j[pos2] == "()":
+                    contador = 0
+                    break
+                if (j[pos2] == ","):
+                    contador += 1
+                pos2 += 1
+            validacion.append(j[pos])
+            validacion.append(contador)          
         pos+=1
             
-            
-            
-    print(LCompletaParam)
-    print(dict)
+    pos = 0
+    while pos < len(validacion):
+        if validacion[pos] in LCompletaParam and validacion[pos+1] != LCompletaParam[validacion[pos]]:
+            print("No")
+            exit = 1
+        pos += 1
 except pp.ParseException as e:
     print("No")
 
+if exit == 1:
+    sys.exit(1)
 try: 
+
     e = pattern.parseString(input_text)
     sumatoria = 0
     #print(LCompleta)

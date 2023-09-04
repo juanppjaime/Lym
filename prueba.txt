@@ -19,7 +19,7 @@ defProc goNorth (d,g,h)
 {
 while can(walk(1 , north ) ) { walk(1 , north ) }
 }
-defProc goWest ()
+defProc goWest (g,g,g,g,g,g)
 {
 if can(walk(1 , west ) ) { walk(1 , west ) } else nop()
 }
@@ -27,6 +27,6 @@ if can(walk(1 , west ) ) { walk(1 , west ) } else nop()
 walk(1,north);
 putCB(2,2);
 walk(1,north);
-goWest(1,8);
+goWest(5,5,5,5,5,5);
 putCB(2,2)
 }
